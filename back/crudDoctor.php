@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__.'/../config.php';
 include __DIR__.'/../back/doctor.php';
 
@@ -68,23 +69,31 @@ class CrudUser
     {
         try {
             $db = config::getConnexion();
-
+    
             $requete = $db->prepare("UPDATE user SET nom = :nom, prenom = :prenom, email = :email, mdp = :mdp, role = :role WHERE id_user = :id_user");
-
-            $requete->bindParam(':id_user', $id_user);
+    
+            // Bind the parameters
+            $requete->bindParam(':id_user', $id_user, PDO::PARAM_INT);
             $requete->bindParam(':nom', $newData['nom']);
             $requete->bindParam(':prenom', $newData['prenom']);
             $requete->bindParam(':email', $newData['email']);
             $requete->bindParam(':mdp', $newData['mdp']);
             $requete->bindParam(':role', $newData['role']);
-
-            $requete->execute();
-
-            echo 'User updated successfully';
+    
+            // Execute the query
+            $success = $requete->execute();
+    
+            if ($success) {
+                echo 'User updated successfully';
+            } else {
+                echo 'Failed to update user. No rows affected.';
+            }
         } catch (PDOException $e) {
             echo 'Failed to update user: ' . $e->getMessage();
         }
     }
+    
+    
 
     public function findUser($id_user)
     {

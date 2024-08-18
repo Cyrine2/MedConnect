@@ -5,11 +5,11 @@ class user
     private string $nom; 
     private string $prenom;
     private string $email;
-    private int $mdp;
+    private string $mdp;
     private string $role;
     
 
-    public function __construct(int $id_user, string $nom, string $prenom, string $email, int $mdp, string $role )
+    public function __construct(int $id_user, string $nom, string $prenom, string $email, string $mdp, string $role )
     {
         $this->id_user = $id_user;
         $this->nom = $nom;

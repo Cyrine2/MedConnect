@@ -1,22 +1,29 @@
 <?php
 include_once './../back/crudDoctor.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $Doctor = new CrudUser();
 
-// Call the ajouter() method to add a new category if form data is submitted
-
-$list = $Doctor->listUsers();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Determine which action to perform based on the form submission
+    // Check the action to determine what to do
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'addUser') {
-            // Call createUser() if the form action is for adding a user
+            
+            // Call createUser() if the action is to add a user
             $Doctor->createUser();
         } elseif ($_POST['action'] === 'deleteUser' && isset($_POST['id_user'])) {
-            // Call deleteUser() if the form action is for deleting a user
+            // Call deleteUser() if the action is to delete a user
             $Doctor->deleteUser($_POST['id_user']);
         }
     }
 }
+
+// Fetch the list of users after processing the form
+$list = $Doctor->listUsers();
+?>
+
 
 
 
@@ -154,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="free">Free</option>
                             <option value="scheduled">Scheduled</option>
                         </select>
-                        <button class="add"><a href="addDoctor.php"><i class="ri-add-line"></i>Add Doctor</a></button>
+                        <button class="add"><a href="addDoctor.html"><i class="ri-add-line"></i>Add Doctor</a></button>
                     </div>
                 </div>
                 <div class="doctors--cards">
@@ -246,11 +253,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <td><?php echo isset($row['role']) ? $row['role'] : ''; ?></td>
                                     <td><a href="suppriDoc.php?id_user=<?php echo $row['id_user']; ?>">delete</a></td>
                                     <td align="center">
-                                        <form method="POST" action="updateUser.php">
-                                            <input type="submit" name="update" value="Update"
-                                                class="btn btn-primary btn-user btn-block">
-                                            <input type="hidden" value="<?php echo $row['id_user']; ?>" name="id_user">
-                                        </form>
+                                    <form method="POST" action="update.php">
+    <input type="hidden" name="id_user" value="<?php echo htmlspecialchars($row['id_user']); ?>">
+    <input type="submit" name="update" value="Update" class="btn btn-primary btn-user btn-block">
+</form>
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
