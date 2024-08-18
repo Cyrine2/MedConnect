@@ -11,30 +11,35 @@ $DoctorC = new CrudUser();
 $doctor = null;
 
 // Check if the form is submitted via POST method
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST["id_user"]) && isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["email"]) && isset($_POST["mdp"]) && isset($_POST["role"])) {
-        if (!empty($_POST["id_user"]) && !empty($_POST["nom"]) && !empty($_POST["prenom"]) && !empty($_POST["email"]) && !empty($_POST["mdp"]) && !empty($_POST["role"])) {
-            // Hash the password before storing it
-            $hashedPassword = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
+if (
+    isset($_POST["id_user"]) &&
+    isset($_POST["nom"]) &&
+    isset($_POST["prenom"]) &&
+    isset($_POST["email"]) &&
+    isset($_POST["role"])
+) {
+    if (
+        !empty($_POST["id_user"]) &&
+        !empty($_POST["nom"]) &&
+        !empty($_POST["prenom"]) &&
+        !empty($_POST["email"]) &&
+        !empty($_POST["role"])
+    ) {
+        // Prepare the new data array
+        $newData = [
+            'nom' => $_POST['nom'],
+            'prenom' => $_POST['prenom'],
+            'email' => $_POST['email'],
+            'mdp' => $_POST['mdp'], // Allow this to be blank
+            'role' => $_POST['role']
+        ];
 
-            // Prepare the new data array
-            $newData = [
-                'nom' => $_POST['nom'],
-                'prenom' => $_POST['prenom'],
-                'email' => $_POST['email'],
-                'mdp' => $hashedPassword,
-                'role' => $_POST['role']
-            ];
-
-            // Update user information
-            $result = $DoctorC->updateUser($_POST['id_user'], $newData);
-            if ($result) {
-                header('Location: doctorTab.php'); // Redirect to your table page
-                exit();
-            } 
-        } else {
-            $error = "Missing information";
-        }
+        // Update user information
+        $DoctorC->updateUser($_POST['id_user'], $newData);
+        header('Location: doctorTab.php'); // Redirect to your table page
+        exit();
+    } else {
+        $error = "Missing information";
     }
 }
 

@@ -18,7 +18,6 @@ class CrudUser
             die('Erreur: ' . $e->getMessage());
         }
     }
-
     public function createUser()
     {
         $db = config::getConnexion();
@@ -28,26 +27,30 @@ class CrudUser
             $email = isset($_POST['email']) ? $_POST['email'] : '';
             $mdp = isset($_POST['mdp']) ? $_POST['mdp'] : '';
             $role = isset($_POST['role']) ? $_POST['role'] : '';
-
+    
+            // Hash the password before storing it
+            $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT);
+    
             $requete = $db->prepare("INSERT INTO user (nom, prenom, email, mdp, role) VALUES (:nom, :prenom, :email, :mdp, :role)");
-
+    
             $requete->bindParam(':nom', $nom);
             $requete->bindParam(':prenom', $prenom);
             $requete->bindParam(':email', $email);
-            $requete->bindParam(':mdp', $mdp);
+            $requete->bindParam(':mdp', $hashedPassword); // Store the hashed password
             $requete->bindParam(':role', $role);
-
+    
             $requete->execute();
-
+    
             echo '<div class="alert alert-success" role="alert">';
             echo '<i class="bi bi-check-circle-fill"></i> User added successfully! ';
             echo '<a href="UserBack.php" class="btn btn-primary">Back</a>';
             echo '</div>';
-
+    
         } catch (PDOException $e) {
             echo 'Failed to create user: ' . $e->getMessage();
         }
     }
+    
 
     public function deleteUser($id_user)
     {
@@ -64,20 +67,29 @@ class CrudUser
             echo 'Failed to delete user: ' . $e->getMessage();
         }
     }
-
     public function updateUser($id_user, $newData)
     {
         try {
             $db = config::getConnexion();
     
+            // Fetch the current data
+            $requete = $db->prepare("SELECT * FROM user WHERE id_user = :id_user");
+            $requete->bindParam(':id_user', $id_user);
+            $requete->execute();
+            $currentData = $requete->fetch(PDO::FETCH_ASSOC);
+    
+            // Keep the current password if a new one isn't provided
+            $newPassword = !empty($newData['mdp']) ? password_hash($newData['mdp'], PASSWORD_DEFAULT) : $currentData['mdp'];
+    
+            // Prepare the update query
             $requete = $db->prepare("UPDATE user SET nom = :nom, prenom = :prenom, email = :email, mdp = :mdp, role = :role WHERE id_user = :id_user");
     
             // Bind the parameters
-            $requete->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+            $requete->bindParam(':id_user', $id_user);
             $requete->bindParam(':nom', $newData['nom']);
             $requete->bindParam(':prenom', $newData['prenom']);
             $requete->bindParam(':email', $newData['email']);
-            $requete->bindParam(':mdp', $newData['mdp']);
+            $requete->bindParam(':mdp', $newPassword);
             $requete->bindParam(':role', $newData['role']);
     
             // Execute the query
@@ -92,6 +104,7 @@ class CrudUser
             echo 'Failed to update user: ' . $e->getMessage();
         }
     }
+    
     
     
 

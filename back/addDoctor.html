@@ -25,10 +25,10 @@
 									<div class="form-group">
 										<i class="icofont-user-alt-5"></i>
 										<input type="hidden" name="action" value="addUser">
-
 										<label for="prenom" class="form-label">First Name:</label>
 										<input name="prenom" id="prenom" type="text" class="form-control"
-											placeholder="First Name" aria-label="First Name" required>
+											placeholder="First Name" aria-label="First Name" required
+											pattern="[A-Za-zÀ-ÿ\s]+" title="First name can only contain letters and spaces">
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -36,16 +36,18 @@
 										<i class="icofont-user-alt-5"></i>
 										<label for="nom" class="form-label">Last Name:</label>
 										<input name="nom" id="nom" type="text" class="form-control"
-											placeholder="Last Name" aria-label="Last Name" required>
+											placeholder="Last Name" aria-label="Last Name" required
+											pattern="[A-Za-zÀ-ÿ\s]+" title="Last name can only contain letters and spaces">
 									</div>
 								</div>
+								
 								<div class="col-md-6">
 									<div class="form-group">
 										<i class="icofont-calendar"></i>
 										<label for="email" class="form-label">Email:</label>
-										<input name="email" id="email" type="text" class="form-control" aria-label="email"
-											required>
+										<input name="email" id="email" type="email" class="form-control" aria-label="email" required>
 									</div>
+									
 								</div>
 								<div class="col-md-6">
 									<div class="form-group" style="margin-top: 10px;">
@@ -57,10 +59,16 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group" style="margin-top: 10px;">
-										<label for="role" class="form-label d-block"><i class="fa fa-user-tag"></i>
-											Role:</label>
-										<input name="role" id="role" type="text" class="form-control" aria-label="role"
-											required>
+										<label for="role" class="form-label d-block"><i class="fa fa-user-tag"></i> Role:</label>
+										<select name="role" id="role" class="form-control" aria-label="role" required>
+											<option value="">Select Role</option>
+											<option value="Doctor">Doctor</option>
+											<option value="Nurse">Nurse</option>
+											<option value="Pharmacist">Pharmacist</option>
+											<option value="Lab Technician">Lab Technician</option>
+											<option value="Receptionist">Receptionist</option>
+											<option value="Administrator">Administrator</option>
+										</select>
 									</div>
 								</div>
 						

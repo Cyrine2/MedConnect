@@ -251,7 +251,7 @@ $list = $Doctor->listUsers();
                                     <td><?php echo isset($row['email']) ? $row['email'] : ''; ?></td>
                                     <td><?php echo isset($row['mdp']) ? $row['mdp'] : ''; ?></td>
                                     <td><?php echo isset($row['role']) ? $row['role'] : ''; ?></td>
-                                    <td><a href="suppriDoc.php?id_user=<?php echo $row['id_user']; ?>">delete</a></td>
+                                    <td><a class="delete-link"  href="suppriDoc.php?id_user=<?php echo $row['id_user']; ?>">delete</a></td>
                                     <td align="center">
                                     <form method="POST" action="update.php">
     <input type="hidden" name="id_user" value="<?php echo htmlspecialchars($row['id_user']); ?>">
@@ -271,3 +271,35 @@ $list = $Doctor->listUsers();
 </body>
 
 </html>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Function to show confirmation dialog
+    function showConfirmationDialog(message, callback) {
+        if (confirm(message)) {
+            callback();
+        }
+    }
+
+    // Get all delete links
+    const deleteLinks = document.querySelectorAll('.delete-link');
+
+    // Add click event listener to each delete link
+    deleteLinks.forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            // Prevent default link behavior
+            event.preventDefault();
+
+            // Get the category ID to delete from the href attribute
+            const href = link.getAttribute('href');
+            const categoryId = href.split('=')[1];
+
+            // Call the custom confirmation dialog function
+            showConfirmationDialog("Are you sure you want to delete this category?", function() {
+                // Redirect to suppcateg.php with the category ID after confirmation
+                window.location.href = href;
+            });
+        });
+    });
+});
+</script>
+<!--The value you're seeing, something like $2y$10$gmf8RPVF69UI9..., is a hashed version of the password. This hash is generated using the password_hash() function in PHP. It's not the actual password but a secure, encrypted representation of it. -->
