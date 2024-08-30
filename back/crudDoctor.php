@@ -145,5 +145,11 @@ class CrudUser
             die('Error: ' . $e->getMessage());
         }
     }
+    public static function fetchDoctors() {
+        $db = config::getConnexion();
+        $query = "SELECT id_user, nom, prenom FROM user";
+        $statement = $db->query($query);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
