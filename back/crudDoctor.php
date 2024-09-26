@@ -25,7 +25,7 @@ class CrudUser
             $nom = isset($_POST['nom']) ? $_POST['nom'] : '';
             $prenom = isset($_POST['prenom']) ? $_POST['prenom'] : '';
             $email = isset($_POST['email']) ? $_POST['email'] : '';
-            $mdp = isset($_POST['mdp']) ? $_POST['mdp'] : '';
+            $mdp = isset($_POST['password']) ? $_POST['password'] : '';
             $role = isset($_POST['role']) ? $_POST['role'] : '';
     
             // Hash the password before storing it

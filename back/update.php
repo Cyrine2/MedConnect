@@ -142,7 +142,7 @@ if (isset($_POST['id_user'])) {
                     </div>
                     <div class="form-group">
                         <label for="mdp">Password</label>
-                        <input type="password" name="mdp" id="mdp" placeholder="Enter new password (leave blank if not changing)">
+                        <input type="password" name="mdp" id="mdp" placeholder="Enter new password (leave blank if not changing)" readonly >
                     </div>
                     <div class="form-group">
                         <label for="role">Role</label>

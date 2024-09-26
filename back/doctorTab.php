@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check the action to determine what to do
     if (isset($_POST['action'])) {
         if ($_POST['action'] === 'addUser') {
-            
+
             // Call createUser() if the action is to add a user
             $Doctor->createUser();
         } elseif ($_POST['action'] === 'deleteUser' && isset($_POST['id_user'])) {
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Fetch the list of users after processing the form
 $list = $Doctor->listUsers();
-?>
+?>e
 
 
 
@@ -38,6 +38,7 @@ $list = $Doctor->listUsers();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Dashboard</title>
 </head>
 
@@ -235,7 +236,7 @@ $list = $Doctor->listUsers();
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>email</th>
-                                <th>Password</th>
+                                
                                 <th>role</th>
 
                                 <th>Actions</th>
@@ -249,16 +250,15 @@ $list = $Doctor->listUsers();
                                     <td><?php echo isset($row['nom']) ? $row['nom'] : ''; ?></td>
                                     <td><?php echo isset($row['prenom']) ? $row['prenom'] : ''; ?></td>
                                     <td><?php echo isset($row['email']) ? $row['email'] : ''; ?></td>
-                                    <td><?php echo isset($row['mdp']) ? $row['mdp'] : ''; ?></td>
+                                   
                                     <td><?php echo isset($row['role']) ? $row['role'] : ''; ?></td>
-                                    <td><a class="delete-link"  href="suppriDoc.php?id_user=<?php echo $row['id_user']; ?>">delete</a></td>
-                                    <td align="center">
-                                    <form method="POST" action="update.php">
-    <input type="hidden" name="id_user" value="<?php echo htmlspecialchars($row['id_user']); ?>">
-    <input type="submit" name="update" value="Update" class="btn btn-primary btn-user btn-block">
-</form>
-
-                                    </td>
+                                    <td class="btn-group">
+                                    <a class="btn btn-danger btn-sm" href="suppriDoc.php?id_user=<?php echo htmlspecialchars($row['id_user']); ?>">Delete</a>
+                                    <form method="POST" action="update.php" class="d-inline">
+                                        <input type="hidden" name="id_user" value="<?php echo htmlspecialchars($row['id_user']); ?>">
+                                        <button type="submit" name="update" class="btn btn-primary btn-sm" >Update</button>
+                                    </form>
+                                </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -269,37 +269,66 @@ $list = $Doctor->listUsers();
     </section>
     <script src="assets/js/main.js"></script>
 </body>
+<style>
+        .recent-patients {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        .section-title {
+            margin-bottom: 30px;
+        }
+        .table thead th {
+            background-color:#17a2b8;
+            color: white;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+        }
+        .btn-group .btn {
+            margin-right: 10px;
+        }
+    </style>
 
 </html>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Function to show confirmation dialog
-    function showConfirmationDialog(message, callback) {
-        if (confirm(message)) {
-            callback();
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to show confirmation dialog
+        function showConfirmationDialog(message, callback) {
+            if (confirm(message)) {
+                callback();
+            }
         }
-    }
 
-    // Get all delete links
-    const deleteLinks = document.querySelectorAll('.delete-link');
+        // Get all delete links
+        const deleteLinks = document.querySelectorAll('.delete-link');
 
-    // Add click event listener to each delete link
-    deleteLinks.forEach(function(link) {
-        link.addEventListener('click', function(event) {
-            // Prevent default link behavior
-            event.preventDefault();
+        // Add click event listener to each delete link
+        deleteLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                // Prevent default link behavior
+                event.preventDefault();
 
-            // Get the category ID to delete from the href attribute
-            const href = link.getAttribute('href');
-            const categoryId = href.split('=')[1];
+                // Get the category ID to delete from the href attribute
+                const href = link.getAttribute('href');
+                const categoryId = href.split('=')[1];
 
-            // Call the custom confirmation dialog function
-            showConfirmationDialog("Are you sure you want to delete this category?", function() {
-                // Redirect to suppcateg.php with the category ID after confirmation
-                window.location.href = href;
+                // Call the custom confirmation dialog function
+                showConfirmationDialog("Are you sure you want to delete this category?", function () {
+                    // Redirect to suppcateg.php with the category ID after confirmation
+                    window.location.href = href;
+                });
             });
         });
     });
-});
 </script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!--The value you're seeing, something like $2y$10$gmf8RPVF69UI9..., is a hashed version of the password. This hash is generated using the password_hash() function in PHP. It's not the actual password but a secure, encrypted representation of it. -->
